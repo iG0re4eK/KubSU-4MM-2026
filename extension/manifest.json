@@ -8,15 +8,12 @@
   },
   "content_scripts": [
     {
-      "js": [
-        "content-script.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "js": ["content-script.js"],
+      "matches": ["<all_urls>"]
     }
   ],
   "background": {
     "service_worker": "service-worker.js"
-  }
+  },
+  "host_permissions": ["http://127.0.0.1:8000/*"]
 }

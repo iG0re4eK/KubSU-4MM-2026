@@ -1,6 +1,4 @@
-const IGNORE_URL_PREFIXES = [
-  "chrome://"
-];
+const IGNORE_URL_PREFIXES = ["chrome://"];
 
 function buildPayload(message) {
   return {
@@ -8,7 +6,7 @@ function buildPayload(message) {
     title: message.title,
     lang: message.lang,
     text: message.text,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 }
 
@@ -18,11 +16,26 @@ chrome.runtime.onMessage.addListener(async (message) => {
   if (!message || message.type !== "view") {
     return; // Пустое или неподходящее сообщение
   }
-  
-  if (!message.url || IGNORE_URL_PREFIXES.some((prefix) => message.url.startsWith(prefix))) {
+  if (
+    !message.url ||
+    IGNORE_URL_PREFIXES.some((prefix) => message.url.startsWith(prefix))
+  ) {
     return; // Пустой или неподходящий URL
   }
 
   const payload = buildPayload(message);
-  console.log("Sending payload", payload); // TODO Send to Backend API
+  console.log("Sending payload", payload);
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/page-view", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    console.log("Response status:", response.status);
+  } catch (error) {
+    console.error("Failed to send payload:", error);
+  }
 });
