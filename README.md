@@ -66,5 +66,35 @@ $ pytest
 ```
 
 ```bash
+$ pip install requests
+```
+
+```bash
 $ pip freeze > requirements.txt
+```
+
+# если у вас кирилица в пути, добавте ( -p ollama-local )
+
+```bash
+docker compose -p ollama-local -f docker-compose.ollama.yml up -d
+```
+
+# скачать и запустить модель
+
+```bash
+docker exec -it ollama ollama run deepseek-r1:1.5b
+docker exec -it ollama ollama run gemma3:4b
+docker exec -it ollama ollama run qwen2.5-coder:7b
+```
+
+# посмотреть список моделей в контейнере ollama (первое название)
+
+```bash
+docker exec -it ollama ollama list
+```
+
+# удалить модель в контейнере ollama (первое название)
+
+```bash
+docker exec -it ollama ollama rm gemma3:12b
 ```
