@@ -12,9 +12,7 @@ function parseTextContent(maxLen) {
 
   result += maxText;
 
-  for (let i = 1; i <= 6; i++) {
-    result += getAllHeaders(i);
-  }
+  result += getAllHeaders();
 
   const semanticSelectors = [
     "header",
@@ -49,13 +47,23 @@ function parseTextContent(maxLen) {
   return result;
 }
 
-function getAllHeaders(number) {
+function getAllHeaders() {
+  let result = "";
+
+  for (let i = 1; i <= 6; i++) {
+    result += getHeaders(i);
+  }
+
+  return result;
+}
+
+function getHeaders(number) {
   const elements = document.querySelectorAll(`h${number}`);
   const headers = Array.from(elements)
     .map((el) => el.textContent.trim())
     .filter((el) => el !== "");
-  
-  return headers.length > 0 
+
+  return headers.length > 0
     ? `\n\n Заголовки h${number}: ` + headers.join(", ")
     : "";
 }
@@ -65,28 +73,27 @@ function getSemanticSelectors(selector) {
   const texts = Array.from(elements)
     .map((el) => el.textContent.trim())
     .filter((el) => el !== "");
-  
+
   return texts.length > 0
-    ? `\n\n Семантический тег ${selector}: ` + texts.join(", ").slice(0, MAX_SUBTEXT_LENGTH)
+    ? `\n\n Семантический тег ${selector}: ` +
+        texts.join(", ").slice(0, MAX_SUBTEXT_LENGTH)
     : "";
 }
 
 function getMetaData(meta) {
   const result = document.querySelector(`meta[${meta}]`);
-  return result?.content 
-    ? `\n\n Метаданные ${meta}: ` + result.content 
-    : "";
+  return result?.content ? `\n\n Метаданные ${meta}: ` + result.content : "";
 }
 
 function getImageDescriptions() {
-  const images = document.querySelectorAll('img[alt]');
+  const images = document.querySelectorAll("img[alt]");
   const alts = Array.from(images)
-    .map(img => img.alt.trim())
-    .filter(alt => alt.length > 10 && alt.length < MAX_SUBTEXT_LENGTH)
+    .map((img) => img.alt.trim())
+    .filter((alt) => alt.length > 10 && alt.length < MAX_SUBTEXT_LENGTH)
     .slice(0, 5);
-  
-  return alts.length > 0 
-    ? `\n\n Описания изображений: ` + alts.join(' | ')
+
+  return alts.length > 0
+    ? `\n\n Описания изображений: ` + alts.join(" | ")
     : "";
 }
 
@@ -97,6 +104,7 @@ window.addEventListener("load", (event) => {
     title: document.title || "",
     lang: document.documentElement?.lang || "",
     text: parseTextContent(MAX_TEXT_LENGTH),
+    headers: getAllHeaders(),
   };
 
   chrome.runtime.sendMessage(payload);

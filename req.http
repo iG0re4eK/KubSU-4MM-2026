@@ -1,3 +1,5 @@
+###
+
 POST http://localhost:11434/api/generate
 Content-Type: application/json
 
@@ -9,9 +11,24 @@ Content-Type: application/json
 
 ###
 
-POST http://127.0.0.1:8000/my-chat-gpt
+POST http://localhost:11434/api/generate
+Content-Type: application/json
+
+{
+  "model": "deepseek-r1:7b",
+  "prompt": "Лучший ВУЗ в Краснодаре?",
+  "stream": false
+}
+
+###
+
+POST http://127.0.0.1:8000/request
 Content-Type: application/json
 
 {
   "prompt": "Лучший ВУЗ в Краснодаре?"
 }
+
+###
+
+GET http://127.0.0.1:8000/history

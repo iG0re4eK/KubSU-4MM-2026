@@ -6,6 +6,7 @@ function buildPayload(message) {
     title: message.title,
     lang: message.lang,
     text: message.text,
+    headers: message.headers,
     timestamp: new Date().toISOString(),
   };
 }
